@@ -25,7 +25,11 @@ export default function LoginForm() {
       const response = await axios.post('http://localhost:1112/auth/login', input);
       console.log(response.data);
     } catch (error) {
-      setError(error.response.data.error);
+      if (error.response.status === 401) {
+        setError("Incorrect username or password. Please try again.");
+      } else {
+        setError("An error occurred. Please try again later.");
+      }
     }
   };
 

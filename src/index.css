@@ -5,18 +5,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-
-/* CSS code */
-
-/* For mobile devices */
-@media only screen and (max-width: 480px) {
-    .container {
-      width: 90%; /* Adjust the width of the container */
-      margin: auto; /* Center the container horizontally */
-      padding: 10px; /* Add padding to the container */
-      border: 1px solid #ccc; /* Add a border to the container */
-      border-radius: 10px; /* Add border-radius to make it rounded */
-    }
-  }
-  

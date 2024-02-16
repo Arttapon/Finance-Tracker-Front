@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // เพิ่ม useNavigate ที่นี่
 import logo from "../assets/pic/Logo.jpg";
 
 export default function LoginForm() {
@@ -10,6 +10,7 @@ export default function LoginForm() {
     rememberMe: false
   });
   const [error, setError] = useState('');
+  const navigate = useNavigate(); // นำเข้า useNavigate เพื่อใช้ในการเปลี่ยนเส้นทาง
 
   const handleChange = e => {
     if (e.target.type === "checkbox") {
@@ -24,6 +25,7 @@ export default function LoginForm() {
     try {
       const response = await axios.post('http://localhost:1112/auth/login', input);
       console.log(response.data);
+      navigate('/main'); // เปลี่ยนเส้นทางไปยังหน้าหลักหลังจาก login เสร็จสมบูรณ์
     } catch (error) {
       if (error.response.status === 401) {
         setError("Incorrect username or password. Please try again.");
@@ -79,7 +81,6 @@ export default function LoginForm() {
             </button>
             <div className="flex gap-2">
               <Link to="/register" className="btn bg-blue-700">Register</Link>
-              
             </div>
           </div>
           {error && <p className="text-red-500">{error}</p>}

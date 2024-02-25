@@ -20,7 +20,7 @@ export default function RegisterForm() {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:1112/auth/register', input);
+      const response = await axios.post('http://localhost:6969/auth/register', input);
       console.log(response.data);
       alert("Registration successful!");
       navigate("/login");

@@ -1,7 +1,7 @@
 // front/src/App.jsx
 
 import useAuth from "./hooks/useAuth";
-import AppRouter from "./routes/appRouter";
+import AppRouter from "./Routes/AppRouter";
 
 function App() {
   const { loading } = useAuth()

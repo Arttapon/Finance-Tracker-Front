@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom"; // เพิ่ม useNavi
 import logo from "../assets/pic/Logo.jpg";
 
 export default function LoginForm() {
+  const [user, setUser] = useState(null)
   const [input, setInput] = useState({
     username: '',
     password: '',
@@ -21,17 +22,24 @@ export default function LoginForm() {
   };
 
   const handleSubmit = async e => {
-    e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:1112/auth/login', input);
-      console.log(response.data);
-      navigate('/main'); // เปลี่ยนเส้นทางไปยังหน้าหลักหลังจาก login เสร็จสมบูรณ์
-    } catch (error) {
-      if (error.response.status === 401) {
-        setError("Incorrect username or password. Please try again.");
-      } else {
-        setError("An error occurred. Please try again later.");
+      e.preventDefault()
+      // validation
+      const rs = await axios.post('http://localhost:6969/auth/login', input)
+      console.log(rs.data.token)
+      localStorage.setItem('token', rs.data.token)
+      const rs1 = await axios.get('http://localhost:6969/auth/me',{
+        headers : { Authorization : `Bearer ${rs.data.token}` }
+      })
+      if (rs.status === 200) {
+        alert('login successful')
+        navigate('/main')
       }
+      // console.log(rs1.data)
+      setUser(rs1.data)
+      
+    }catch(err) {
+      console.log( err.message)
     }
   };
 

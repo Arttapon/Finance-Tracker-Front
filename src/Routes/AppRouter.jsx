@@ -3,8 +3,14 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import HomeScreen from "../layout/HomeScreen";
 import LoginForm from "../layout/LoginForm";
 import RegisterForm from "../layout/RegisterForm";
-import MainPage from '../components/mainpage';
 import FinancePlan from '../components/FinancePlan'; 
+import BudgetPage from "../components/ฺBudget";
+import GetUser from "../components/MainPage";
+import AddBudget from '../components/AddBudget';
+import DataSharing from "../components/DataSharing";
+import CreatePlan from "../components/CreatePlan";
+import Settings from "../components/Settings";
+
 
 function AppRouter() {
   return (
@@ -13,9 +19,14 @@ function AppRouter() {
         <Route path="/" element={<HomeScreen />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
-        <Route path="/main" element={<MainPage />} />
-        <Route exact path="/" component={MainPage} />
-        <Route path="/finance-plan" element={<FinancePlan />} /> {/* แก้ไขตรงนี้เพื่อเพิ่ม Element ของ FinancePlan */}
+        <Route path="/main" element={<GetUser/>} />
+        {/* <Route exact path="/" component={MainPage} /> */}
+        <Route path="/financial-plan" element={<FinancePlan />} />
+        <Route path="/financial-plan/CreatePlan" element={<CreatePlan />} />
+        <Route path="/Budget" element={<BudgetPage />} />
+        <Route path="/AddBudget" element={<AddBudget />} />
+        <Route path="/DataSharing" element={<DataSharing />} />
+        <Route path="/settings" element={<Settings />} />
         {/* เพิ่มเส้นทางอื่น ๆ ตามต้องการ */}
       </Routes>
     </BrowserRouter>

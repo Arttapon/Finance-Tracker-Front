@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios'; // เพิ่มบรรทัดนี้เข้ามา
+import axios from 'axios';
 import AuthContext from '../contexts/AuthContext';
 
 function Budget() {
-  const { user, loading, logout } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const [budgets, setBudgets] = useState([]);
 
   const fetchBudgets = async () => {
@@ -31,7 +31,6 @@ function Budget() {
       await axios.delete(`http://localhost:6969/budget/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      // หลังจากลบแล้วให้ดึงข้อมูล Budgets ใหม่
       fetchBudgets();
     } catch (error) {
       console.error('Error deleting budget:', error);
@@ -40,16 +39,13 @@ function Budget() {
 
   return (
     <div className="flex min-h-screen bg-cyan-200">
-      {/* Sidebar */}
       <div className="bg-gray-800 text-white w-64 py-8 px-4">
-        {/* Logo Profile */}
         <div className="flex flex-col items-center justify-center mb-8">
           <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="Logo" className="w-16 h-16 rounded-full mb-2" />
           <span className="text-sm">{user ? user.username : 'Guest'}</span>
         </div>
         <hr />
         <br />
-        {/* Menu */}
         <nav>
           <ul>
             <li className="mb-2">
@@ -65,18 +61,19 @@ function Budget() {
           </ul>
         </nav>
       </div>
-      {/* Content */}
+
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-4">Budget</h1>
 
         <div className="grid grid-cols-3 gap-4">
-          {Array.isArray(budgets) && budgets.map((budget) => (
+          {budgets.map((budget) => (
             <div key={budget.id} className="bg-gray-100 p-4 rounded-md">
               <h2 className="text-lg font-semibold mb-2">{budget.category}</h2>
-              <p>Planned Amount: {budget.plannedAmount}</p>
-              <p>Actual Amount: {budget.actualAmount}</p>
-              {/* เพิ่มปุ่ม Delete และเรียกใช้งานฟังก์ชัน handleDeleteBudget */}
-              <button onClick={() => handleDeleteBudget(budget.id)} className="text-red-500">Delete</button>
+              <p>Budget Amount: {budget.BudgetAmount}</p>
+              <p>Used Amount: {budget.Used}</p>
+              <Link to={`/spend/${budget.id}`} className="text-green-500">Spend</Link> {/* แก้ชื่อลิงก์เป็น "Spend" */}
+              <button onClick={() => handleDeleteBudget(budget.id)} className="text-red-500 ml-4">Delete</button>
+              
             </div>
           ))}
         </div>
@@ -86,4 +83,4 @@ function Budget() {
   );
 }
 
-export default Budget; // Export Budget as default
+export default Budget;

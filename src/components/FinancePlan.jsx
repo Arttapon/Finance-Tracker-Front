@@ -1,19 +1,19 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import AuthContext from '../contexts/AuthContext'; // Import AuthContext
+import AuthContext from '../contexts/AuthContext';
 
 function FinancePlan() {
-  const { user } = useContext(AuthContext); // Get user from context
+  const { user } = useContext(AuthContext);
   const [plans, setPlans] = useState([]);
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
   useEffect(() => {
     const getPlans = async () => {
       try {
         if (!user) return;
-        const id = user.id;
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:6969/FinancialPlan/${id}`, {
+        const response = await axios.get(`http://localhost:6969/FinancialPlan/user`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -39,6 +39,14 @@ function FinancePlan() {
     } catch (error) {
       console.error('Error deleting plan:', error);
     }
+  };
+
+  const confirmDelete = (planId) => {
+    setConfirmDeleteId(planId);
+  };
+
+  const cancelDelete = () => {
+    setConfirmDeleteId(null);
   };
 
   return (
@@ -76,7 +84,7 @@ function FinancePlan() {
 
         {/* Display user's main financial plan */}
         {plans.length > 0 && (
-          <div className="bg-gray-100 p-4 w-1/3 rounded-lg mb-4">
+          <div className="bg-gray-100 text-black p-4 w-1/3 rounded-lg mb-4">
             <h2 className="text-xl font-semibold mb-4">Your main financial plan</h2>
             <p>Plan Name: {plans[0].PlanName}</p>
             <p>Target Amount: {plans[0].targetAmount}</p>
@@ -84,7 +92,16 @@ function FinancePlan() {
             <p>Amount To Collect: {plans[0].amountToCollect}</p>
             {/* Add other plan details here */}
             <div className="mt-4 flex space-x-4">
-              <button onClick={() => handleDeletePlan(plans[0].id)} className="text-red-500">Delete</button>
+              <Link to={`/deposit/${plans[0].id}`} className="text-green-500">Deposit</Link>
+              <Link to={`/edit/${plans[0].id}`} className="text-blue-500">Edit</Link>
+              {confirmDeleteId === plans[0].id ? (
+                <>
+                  <button onClick={() => handleDeletePlan(plans[0].id)} className="text-red-500">Confirm Delete</button>
+                  <button onClick={cancelDelete} className="text-gray-500">Cancel</button>
+                </>
+              ) : (
+                <button onClick={() => confirmDelete(plans[0].id)} className="text-red-500">Delete</button>
+              )}
             </div>
           </div>
         )}
@@ -92,14 +109,23 @@ function FinancePlan() {
         {/* Display other financial plans */}
         <div className="grid grid-cols-3 gap-4">
           {plans.slice(1).map((plan) => (
-            <div key={plan.id} className="bg-gray-100 p-4 rounded-md">
+            <div key={plan.id} className="bg-gray-100 text-black p-4 rounded-md">
               <h2 className="text-lg font-semibold mb-2">{plan.PlanName}</h2>
               <p>Target Amount: {plan.targetAmount}</p>
               <p>Current Amount: {plan.currentAmount}</p>
               <p>Amount To Collect: {plan.amountToCollect}</p>
               {/* Add other plan details here */}
               <div className="mt-4 flex space-x-4">
-                <button onClick={() => handleDeletePlan(plan.id)} className="text-red-500">Delete</button>
+                <Link to={`/deposit/${plan.id}`} className="text-green-500">Deposit</Link>
+                <Link to={`/edit/${plan.id}`} className="text-blue-500">Edit</Link>
+                {confirmDeleteId === plan.id ? (
+                  <>
+                    <button onClick={() => handleDeletePlan(plan.id)} className="text-red-500">Confirm Delete</button>
+                    <button onClick={cancelDelete} className="text-gray-500">Cancel</button>
+                  </>
+                ) : (
+                  <button onClick={() => confirmDelete(plan.id)} className="text-red-500">Delete</button>
+                )}
               </div>
             </div>
           ))}
@@ -111,5 +137,3 @@ function FinancePlan() {
 }
 
 export default FinancePlan;
-
-

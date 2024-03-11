@@ -3,16 +3,17 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // เพิ่ม useNavigate ที่นี่
 import logo from "../assets/pic/Logo.jpg";
 
+// Component สำหรับแสดงแบบฟอร์มการเข้าสู่ระบบ
 export default function LoginForm() {
-  const [user, setUser] = useState(null)
   const [input, setInput] = useState({
-    username: '',
-    password: '',
-    rememberMe: false
+    username: '', // สถานะเก็บค่าชื่อผู้ใช้
+    password: '', // สถานะเก็บค่ารหัสผ่าน
+    rememberMe: false // สถานะเก็บค่าการจำรหัสผ่าน
   });
-  const [error, setError] = useState('');
-  const navigate = useNavigate(); // นำเข้า useNavigate เพื่อใช้ในการเปลี่ยนเส้นทาง
+  const [error, setError] = useState(''); // สถานะเก็บข้อผิดพลาด
+  const navigate = useNavigate(); // เรียกใช้ hook useNavigate เพื่อใช้ในการเปลี่ยนเส้นทาง
 
+  // ฟังก์ชันที่ใช้ในการจัดการการเปลี่ยนแปลงของข้อมูลในฟอร์ม
   const handleChange = e => {
     if (e.target.type === "checkbox") {
       setInput(prevState => ({ ...prevState, [e.target.name]: e.target.checked }));
@@ -21,28 +22,27 @@ export default function LoginForm() {
     }
   };
 
+  // ฟังก์ชันที่ใช้สำหรับการส่งคำขอเข้าสู่ระบบไปยังเซิร์ฟเวอร์
   const handleSubmit = async e => {
     try {
-      e.preventDefault()
-      // validation
-      const rs = await axios.post('http://localhost:6969/auth/login', input)
-      console.log(rs.data.token)
-      localStorage.setItem('token', rs.data.token)
-      const rs1 = await axios.get('http://localhost:6969/auth/me',{
-        headers : { Authorization : `Bearer ${rs.data.token}` }
-      })
+      e.preventDefault(); // ป้องกันการโหลดหน้าใหม่ขณะที่กำลังส่งคำขอ
+      const rs = await axios.post('http://localhost:6969/auth/login', input); // ส่งคำขอเข้าสู่ระบบไปยังเซิร์ฟเวอร์
+      console.log(rs.data.token); // แสดง token ที่ได้รับกลับมาจากเซิร์ฟเวอร์ในคอนโซล
+      localStorage.setItem('token', rs.data.token); // เก็บ token ลงใน localStorage
+      const rs1 = await axios.get('http://localhost:6969/auth/me', {
+        headers: { Authorization: `Bearer ${rs.data.token}` }
+      }); // ส่งคำขอเพื่อขอข้อมูลผู้ใช้
       if (rs.status === 200) {
-        alert('login successful')
-        navigate('/main')
+        alert('login successful'); // แสดงแจ้งเตือนเมื่อเข้าสู่ระบบสำเร็จ
+        navigate('/main'); // เปลี่ยนเส้นทางไปยังหน้าหลักหลังจากเข้าสู่ระบบสำเร็จ
       }
-      // console.log(rs1.data)
-      setUser(rs1.data)
-      
-    }catch(err) {
-      console.log( err.message)
+      setUser(rs1.data); // กำหนดข้อมูลผู้ใช้ลงใน state
+    } catch (err) {
+      console.log(err.message); // แสดงข้อความ error ในกรณีที่เกิดข้อผิดพลาด
     }
   };
 
+  // ส่วนของ JSX ที่ใช้สำหรับแสดงผลบนหน้าเว็บ
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-cyan-400 text-black">
       <img src={logo} alt="Logo" className="mb-8" style={{ maxHeight: "100px" }} />

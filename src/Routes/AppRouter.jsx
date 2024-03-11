@@ -10,6 +10,9 @@ import AddBudget from '../components/AddBudget';
 import DataSharing from "../components/DataSharing";
 import CreatePlan from "../components/CreatePlan";
 import Settings from "../components/Settings";
+import DepositPlan from "../components/DepositPlan";
+import EditPlan from "../components/EditPlan";
+import Spend from "../components/Spend"
 
 
 function AppRouter() {
@@ -27,6 +30,9 @@ function AppRouter() {
         <Route path="/AddBudget" element={<AddBudget />} />
         <Route path="/DataSharing" element={<DataSharing />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/deposit/:id" element={<DepositPlan />} />
+        <Route path="/edit/:id" element={<EditPlan />} />
+        <Route path="/spend/:id" element={<Spend />} />
         {/* เพิ่มเส้นทางอื่น ๆ ตามต้องการ */}
       </Routes>
     </BrowserRouter>

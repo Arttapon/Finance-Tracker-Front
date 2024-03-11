@@ -108,9 +108,10 @@ function Settings() {
             </div>
 
             <div className="flex-1 container mx-auto px-4 py-8 text-black">
-                <h1 className="text-3xl font-bold mb-4">Settings</h1>
+                <h1 className="text-2xl font-bold mb-4">Settings</h1>
                 <form onSubmit={handleSubmit}>
-                    <div className="flex flex-col items-center justify-center mb-8">
+                <h2 className="text-3xl font-semibold mb-4">Profile</h2>
+                    <div className="flex flex-col items-center justify-center mb-8 mt-4">
                         <label htmlFor="profilePicture" className="cursor-pointer text-center">
                             <img src={profileData.profileImage || "https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"} alt="Profile" className="w-16 h-16 rounded-full mb-2" />
                             <span className="text-sm">{user ? user.username : 'Guest'}</span>
@@ -118,12 +119,16 @@ function Settings() {
                         </label>
                     </div>
 
-                    <div className="mb-4 justify-center">
-                        <label htmlFor="nickname" className="block text-sm font-bold mb-2">Nickname</label>
-                        <input type="text" id="nickname" name="nickname" value={profileData.nickname} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                    </div>
+                    {user && (
+                        <div className="container  text-black mt-4">
+                            <h2 className="text-3xl font-semibold mb-4">User Information</h2>
+                            <p>Name: {user.username}</p>
+                            <p>Email: {user.email}</p>
+                            {/* Add more user information as needed */}
+                        </div>
+                    )}
 
-                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Save</button>
+                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white mt-10 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Save</button>
                 </form>
             </div>
         </div>
